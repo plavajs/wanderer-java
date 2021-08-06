@@ -1,6 +1,7 @@
 package components.graphics;
 
 import components.characters.GameCharacter;
+import components.characters.Hero;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,20 +20,24 @@ public class Arena extends JComponent {
     protected static int HEIGHT_BY_STEPS;
     protected List<List<Tile>> linesOfTiles;
     protected List<GameCharacter> gameCharacters;
+    protected JFrame frame;
     private static int arenaLevel = 1;
     protected HUD hud;
 
     public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
         this.gameCharacters = gameCharacters;
 
+        this.frame = frame;
         linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;
         WIDTH_BY_STEPS = WIDTH / STEP;
         HEIGHT_BY_STEPS = HEIGHT / STEP;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        hud = new HUD(frame);
-        frame.add(this, "North");
+        hud = new HUD(frame, false);
+
+
+        this.frame.add(this, "North");
     }
 
     protected Arena() {}
@@ -77,9 +82,10 @@ public class Arena extends JComponent {
                 t.draw(graphics);
             }
         }
-
-        for (GameCharacter c : gameCharacters) {
-            c.draw(graphics);
+        if (!gameCharacters.isEmpty()) {
+            for (GameCharacter c : gameCharacters) {
+                c.draw(graphics);
+            }
         }
     }
 
@@ -114,7 +120,9 @@ public class Arena extends JComponent {
         return new ArrayList<>();
     }
 
-
+    public void setKey() {
+        hud.setKeyImage();
+    }
 
     public List<List<Tile>> getLinesOfTiles() {
         return linesOfTiles;

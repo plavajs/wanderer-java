@@ -13,26 +13,36 @@ public class HUD extends JPanel {
     private JLabel firstLine;
     private JLabel secondLine;
     private JLabel keyImage;
+    private JPanel rightSide;
+    private JPanel leftSide;
+    private String moveMessage;
+    private String bonusMessage = " ";
+    private JFrame frame;
 
-    public HUD(Frame frame) {
+    public HUD(JFrame frame, boolean inBattle) {
+
         width = Arena.getWIDTH() - 90;
+
         height = 90;
 
-        setGraphics(frame);
+        this.frame = frame;
+
+        setGraphics();
+
     }
 
-    private void setGraphics(Frame frame) {
+    private void setGraphics() {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(width, height));
 
         firstLine = new JLabel();
-        firstLine.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 0));
+        firstLine.setBorder(BorderFactory.createEmptyBorder(20, 5, 20, 0));
         firstLine.setBackground(Color.GRAY);
 
         secondLine = new JLabel();
-        secondLine.setBorder(BorderFactory.createEmptyBorder(0, 10, 20, 0));
+        secondLine.setBorder(BorderFactory.createEmptyBorder(0, 5, 20, 0));
 
-        JPanel leftSide = new JPanel();
+        leftSide = new JPanel();
         leftSide.setLayout(new BorderLayout());
         leftSide.add(firstLine, "North");
         leftSide.add(secondLine, "South");
@@ -41,18 +51,18 @@ public class HUD extends JPanel {
         keyImage = new JLabel();
         keyImage.setPreferredSize(new Dimension(80, 80));
 
-        JPanel rightSide = new JPanel();
+        rightSide = new JPanel();
         rightSide.setBackground(Color.GRAY);
         rightSide.add(keyImage);
 
-        this.add(leftSide, "Center");
         this.add(rightSide, "East");
+        this.add(leftSide, "Center");
 
         frame.add(this, "Center");
     }
 
     public void setMessage(Hero hero) {
-        String heroMessage = "Hero (Level " + hero.getHeroLevel() + ")   HP: " + hero.getCurrentHealth() +
+        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
                 "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike();
 
         firstLine.setText(heroMessage);
@@ -60,7 +70,7 @@ public class HUD extends JPanel {
     }
 
     public void setMessage(Hero hero, GameCharacter otherChar) {
-        String heroMessage = "Hero (Level " + hero.getHeroLevel() + ")   HP: " + hero.getCurrentHealth() +
+        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
                 "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike();
 
         firstLine.setText(heroMessage);
@@ -69,21 +79,49 @@ public class HUD extends JPanel {
         if (otherChar instanceof Boss) {
             otherCharMessage = "Boss ";
         } else {
-            otherCharMessage = "Enemy Mob ";
+            otherCharMessage = "Mob ";
         }
-        otherCharMessage += "(Level " + Arena.getArenaLevel() + ")   HP: " + otherChar.getMaxHealth() + "/"
-                + otherChar. getMaxHealth() + "  |  DP: " + otherChar.getDefense() + "  |  SP: "
-                + otherChar.getStrike() + "      Press Enter to fight...";
+        otherCharMessage += "(Level " + Arena.getArenaLevel() + ") HP: " + otherChar.getCurrentHealth() + "/"
+                + otherChar.getMaxHealth() + "  |  DP: " + otherChar.getDefense() + "  |  SP: "
+                + otherChar.getStrike() + "  " + moveMessage;
 
         secondLine.setText(otherCharMessage);
     }
 
-    public void setKeyImage(Frame frame) {
+    public void setBattleMessage(Hero hero, GameCharacter otherChar) {
+        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
+                "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike()
+                + "  " + bonusMessage;
+
+        firstLine.setText(heroMessage);
+
+        String otherCharMessage;
+        if (otherChar instanceof Boss) {
+            otherCharMessage = "Boss ";
+        } else {
+            otherCharMessage = "Mob ";
+        }
+        otherCharMessage += "(Lvl " + Arena.getArenaLevel() + ") HP: " + otherChar.getCurrentHealth() + "/"
+                + otherChar.getMaxHealth() + "  |  DP: " + otherChar.getDefense() + "  |  SP: "
+                + otherChar.getStrike() + "  " + moveMessage;
+
+        secondLine.setText(otherCharMessage);
+    }
+
+    public void setKeyImage() {
         keyImage = new JLabel((new ImageIcon("img/key.png")), JLabel.CENTER);
-        JPanel rightSide = new JPanel();
+        rightSide = new JPanel();
         rightSide.setBackground(Color.GRAY);
         rightSide.add(keyImage);
-        frame.add(rightSide, "East");
+        this.add(rightSide, "East");
+    }
+
+    public void setMoveMessage(String moveMessage) {
+        this.moveMessage = moveMessage;
+    }
+
+    public void setBonusMessage(String bonusMessage) {
+        this.bonusMessage = bonusMessage;
     }
 
     public void clearKeyImage(Frame frame) {

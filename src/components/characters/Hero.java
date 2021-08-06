@@ -133,6 +133,10 @@ public class Hero extends GameCharacter {
     public void levelUp() {
         heroLevel++;
         maxHealth += dice.roll();
+        currentHealth += dice.roll();
+        if (currentHealth > maxHealth) {
+            currentHealth = maxHealth;
+        }
         defencePoints += dice.roll();
         strikePoints += dice.roll();
     }
@@ -162,7 +166,6 @@ public class Hero extends GameCharacter {
     @Override
     public void strike(GameCharacter anotherChar) {
         int damage = strikePoints + 2 * dice.roll();
-        System.out.println(damage);
         if (anotherChar instanceof EnemyMob) {
             if (damage > anotherChar.defencePoints) {
                 anotherChar.getHit(damage);

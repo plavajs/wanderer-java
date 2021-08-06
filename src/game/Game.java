@@ -6,7 +6,6 @@ import components.characters.GameCharacter;
 import components.characters.Hero;
 import components.graphics.Arena;
 import components.graphics.BattleArena;
-import components.graphics.HUD;
 import components.graphics.Tile;
 
 import javax.swing.*;
@@ -29,6 +28,10 @@ public class Game extends JFrame implements KeyListener {
     private BattleArena battle;
     private boolean inBattle;
 
+    public boolean isInBattle() {
+        return inBattle;
+    }
+
     public Game() {
         allGameCharacters = new ArrayList<>();
         enemyGameCharacters = new ArrayList<>();
@@ -40,7 +43,6 @@ public class Game extends JFrame implements KeyListener {
 
         checkForMeeting();
         giveRandomMobTheKey();
-
     }
 
     private void initCharacters() {
@@ -83,6 +85,7 @@ public class Game extends JFrame implements KeyListener {
         GameCharacter enemy = null;
         for (GameCharacter c : enemyGameCharacters) {
             if (c.getPosX() == hero.getPosX() && c.getPosY() == hero.getPosY()) {
+                arena.getHud().setMoveMessage("Press ENTER to fight...");
                 arena.getHud().setMessage(hero, c);
                 enemy = c;
                 meet = true;
@@ -91,9 +94,7 @@ public class Game extends JFrame implements KeyListener {
         if (!meet) {
             arena.getHud().setMessage(hero);
         }
-        if (hero.hasKey()) {
-            arena.getHud().setKeyImage(mainFrame);
-        }
+
         return enemy;
     }
 
@@ -105,7 +106,7 @@ public class Game extends JFrame implements KeyListener {
         arena = new Arena(allGameCharacters, mainFrame);
 
 //        mainFrame.setSize(new Dimension(Arena.getWIDTH(), Arena.getHEIGHT() + arena.getHud().getHEIGHT()));
-        mainFrame.setLocation(500, 100);
+        mainFrame.setLocation(300, 0);
         mainFrame.pack();
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
@@ -135,6 +136,7 @@ public class Game extends JFrame implements KeyListener {
     // But actually we can use just this one for our goals here
     @Override
     public void keyReleased(KeyEvent e) {
+
         // When the up or down keys hit, we change the position of our box
         if (inBattle) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -144,23 +146,24 @@ public class Game extends JFrame implements KeyListener {
                 if (battle.getHeroClone().isAlive()) {
                     battle.getHeroClone().strike(battle.getEnemyClone());
                     if (battle.getEnemyClone().isAlive()) {
+                        System.out.println("alive");
                         battle.getEnemyClone().strike(battle.getHeroClone());
                     } else {
+
                         battle.winnBattle();
+
                         allGameCharacters.remove(battle.getBattledEnemy());
                         enemyGameCharacters.remove(battle.getBattledEnemy());
 //                        closeBattle();
                     }
-                    battle.rewriteHud();
-                    battle.repaint();
                 }
-            } /*else {
-                battle.lostBattle();
-                closeBattle();
-            }*/
+            }
+
+            battle.rewriteHud();
             battle.repaint();
         } else {
             boolean heroMoved = false;
+            checkKey();
             if (e.getKeyCode() == KeyEvent.VK_UP) {
                 heroMoved = hero.moveY(-1, arena);
             } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -183,12 +186,10 @@ public class Game extends JFrame implements KeyListener {
             }
         }
 
-
-
 // and redraw to have a new picture with the new coordinates
-
+//        System.out.println(hero.hasKey());
         checkForMeeting();
-
+        checkKey();
         arena.repaint();
     }
 
@@ -219,7 +220,8 @@ public class Game extends JFrame implements KeyListener {
         battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         battleFrame.setLayout(new BorderLayout());
         battle = new BattleArena(hero, enemy, battleFrame);
-        battleFrame.setLocationRelativeTo(null);
+
+        battleFrame.setLocation(400,100);
         battleFrame.pack();
         battleFrame.setVisible(true);
 
@@ -229,8 +231,18 @@ public class Game extends JFrame implements KeyListener {
     public void closeBattle() {
         inBattle = false;
         battleFrame.setVisible(false);
-        arena = new Arena(allGameCharacters, mainFrame);
         mainFrame.setVisible(true);
+        checkForMeeting();
+        arena = new Arena(allGameCharacters, mainFrame);
+
+
+        checkKey();
+    }
+
+    public void checkKey() {
+        if (hero.hasKey()) {
+            arena.getHud().setKeyImage();
+        }
     }
 
 }

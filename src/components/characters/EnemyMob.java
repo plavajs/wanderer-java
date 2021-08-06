@@ -108,7 +108,6 @@ public class EnemyMob extends GameCharacter {
         if (currentHealth < 0) {
             currentHealth = 0;
         }
-        System.out.println(currentHealth);
     }
 
     @Override
