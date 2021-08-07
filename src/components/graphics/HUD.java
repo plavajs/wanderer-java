@@ -9,23 +9,24 @@ import java.awt.*;
 public class HUD extends JPanel {
     private int width;
     private int height;
-    private JLabel x1y1 = new JLabel();
-    private JLabel x2y1 = new JLabel();
-    private JLabel x1y2 = new JLabel();
-    private JLabel x2y2 = new JLabel();
-    private JLabel x1y3 = new JLabel();
-    private JLabel x2y3 = new JLabel();
+    private JLabel left1 = new JLabel();
+    private JLabel middle1 = new JLabel();
+    private JLabel left2 = new JLabel();
+    private JLabel middle2 = new JLabel();
+    private JLabel left3 = new JLabel();
+    private JLabel middle3 = new JLabel();
     private JLabel keyImage = new JLabel();
-    private JPanel rightSide = new JPanel();
     private JPanel leftSide = new JPanel();
-    private String moveMessage;
-    private String bonusMessage = " ";
+    private JPanel middleSide = new JPanel();
+    private JPanel rightSide = new JPanel();
+    private String moveMessage = "";
+    private String bonusMessage = "";
     private JFrame frame;
 
     public HUD(JFrame frame, int width) {
         this.width = width;
 
-        height = 100;
+        height = 90;
 
         this.frame = frame;
 
@@ -36,59 +37,54 @@ public class HUD extends JPanel {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(width, height));
 
-        x1y1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
-        x2y1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
-        x1y2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
-        x2y2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
-        x1y3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
-        x2y3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
-
-        leftSide.setLayout(new GridLayout(3,2));
-
-        leftSide.add(x1y1, "1");
-        leftSide.add(x2y1, "2");
-        leftSide.add(x1y2, "3");
-        leftSide.add(x2y2, "4");
-        leftSide.add(x1y3, "5");
-        leftSide.add(x2y3, "6");
-        leftSide.setBackground(Color.GRAY);
-
         keyImage.setPreferredSize(new Dimension(80, 80));
 
-        rightSide.setBackground(Color.GRAY);
+        left1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+        left2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        left3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        middle2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        middle1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+        middle3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+
+        leftSide.setLayout(new GridLayout(3,1));
+        middleSide.setLayout(new GridLayout(3,1));
+
+        leftSide.add(left1, "1");
+        leftSide.add(left2, "3");
+        leftSide.add(left3, "3");
+
+        middleSide.add(middle1, "1");
+        middleSide.add(middle2, "2");
+        middleSide.add(middle3, "3");
         rightSide.add(keyImage);
 
+        leftSide.setBackground(Color.GRAY);
+        middleSide.setBackground(Color.GRAY);
+        rightSide.setBackground(Color.GRAY);
+
+        this.add(leftSide, "West");
+        this.add(middleSide, "Center");
         this.add(rightSide, "East");
-        this.add(leftSide, "Center");
 
         frame.add(this, "South");
     }
 
-    public void setMessage(Hero hero) {
-        String heroMessage = String.valueOf(hero);
-
-        x1y1.setText(heroMessage);
-        x1y2.setText("");
+    public void setHeroMessage(Hero hero) {
+        left1.setText(String.valueOf(hero));
     }
 
-    public void setMessage(Hero hero, GameCharacter otherChar) {
-        String heroMessage = String.valueOf(hero);
-
-        x1y1.setText(heroMessage);
-
-        String otherCharMessage = otherChar + "  " + moveMessage;
-
-        x1y2.setText(otherCharMessage);
+    public void setEnemyMessage(GameCharacter otherChar) {
+        left2.setText(String.valueOf(otherChar));
     }
 
     public void setBattleMessage(Hero hero, GameCharacter otherChar) {
         String heroMessage = hero + "  " + bonusMessage;
 
-        x1y1.setText(heroMessage);
+        left1.setText(heroMessage);
 
         String otherCharMessage = otherChar + "  " + moveMessage;
 
-        x1y2.setText(otherCharMessage);
+        left2.setText(otherCharMessage);
     }
 
     public void setKeyImage() {
@@ -103,8 +99,8 @@ public class HUD extends JPanel {
         this.bonusMessage = bonusMessage;
     }
 
-//    public void clearKeyImage(Frame frame) {
-//        keyImage = ;
-//    }
+    public void clearKeyImage() {
+        rightSide.remove(keyImage);
+    }
 
 }

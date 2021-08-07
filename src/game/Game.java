@@ -89,13 +89,14 @@ public class Game extends JFrame implements KeyListener {
         for (GameCharacter c : enemyGameCharacters) {
             if (c.getPosX() == hero.getPosX() && c.getPosY() == hero.getPosY()) {
                 mainHud.setKeyMessage("Press ENTER to fight...");
-                mainHud.setMessage(hero, c);
+                mainHud.setHeroMessage(hero);
+                mainHud.setEnemyMessage(c);
                 enemy = c;
                 meet = true;
             }
         }
          if (!meet) {
-            mainHud.setMessage(hero);
+            mainHud.setHeroMessage(hero);
         }
         return enemy;
     }
@@ -230,7 +231,8 @@ public class Game extends JFrame implements KeyListener {
 
         battleHud = new HUD(battleFrame, battle.getWidth());
         battleHud.setKeyMessage("Press SPACE to strike...");
-        battleHud.setMessage(hero, enemy);
+        battleHud.setHeroMessage(hero);
+        battleHud.setEnemyMessage(enemy);
 
         battleFrame.setLocation(400,100);
         battleFrame.pack();
