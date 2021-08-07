@@ -31,10 +31,6 @@ public class Game extends JFrame implements KeyListener {
     private HUD mainHud;
     private HUD battleHud;
 
-    public boolean isInBattle() {
-        return inBattle;
-    }
-
     public Game() {
         allGameCharacters = new ArrayList<>();
         enemyGameCharacters = new ArrayList<>();
@@ -43,6 +39,7 @@ public class Game extends JFrame implements KeyListener {
 
         initGraphics();
         initCharacters();
+        mainHud.setHeroMessage(hero);
 
         checkForMeeting();
         giveRandomMobTheKey();
@@ -88,15 +85,13 @@ public class Game extends JFrame implements KeyListener {
         boolean meet = false;
         for (GameCharacter c : enemyGameCharacters) {
             if (c.getPosX() == hero.getPosX() && c.getPosY() == hero.getPosY()) {
-                mainHud.setKeyMessage("Press ENTER to fight...");
-                mainHud.setHeroMessage(hero);
                 mainHud.setEnemyMessage(c);
                 enemy = c;
                 meet = true;
             }
         }
          if (!meet) {
-            mainHud.setHeroMessage(hero);
+            mainHud.setEnemyMessage("");
         }
         return enemy;
     }
@@ -230,7 +225,6 @@ public class Game extends JFrame implements KeyListener {
         battle = new BattleArena(hero, enemy, battleFrame);
 
         battleHud = new HUD(battleFrame, battle.getWidth());
-        battleHud.setKeyMessage("Press SPACE to strike...");
         battleHud.setHeroMessage(hero);
         battleHud.setEnemyMessage(enemy);
 
@@ -266,7 +260,7 @@ public class Game extends JFrame implements KeyListener {
         battle.getEnemyClone().die();
         battle.repaint();
         battle.getHeroClone().levelUp();
-        rewriteBattleHud();
+
         if (enemy instanceof EnemyMob) {
             if (((EnemyMob) enemy).isKeyHolder()) {
                 battle.getHeroClone().setHasKey(true);
@@ -274,15 +268,15 @@ public class Game extends JFrame implements KeyListener {
                 battleHud.setBonusMessage("You found the KEY!");
             }
         }
-        battleHud.setKeyMessage("Press ESC to exit battle...");
+        battleHud.setBonusMessage("Press ESC to exit battle...");
 
-        rewriteBattleHud();
+        battleHud.repaint();
         hero.copyStats(battle.getHeroClone());
     }
 
-    public void rewriteBattleHud() {
-        battleHud.setBattleMessage(battle.getHeroClone(), battle.getEnemyClone());
-    }
+//    public void rewriteBattleHud() {
+//        battleHud.setBattleMessage(battle.getHeroClone(), battle.getEnemyClone());
+//    }
 
     public void lostBattle() {
 

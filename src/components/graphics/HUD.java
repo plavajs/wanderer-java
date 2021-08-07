@@ -9,6 +9,14 @@ import java.awt.*;
 public class HUD extends JPanel {
     private int width;
     private int height;
+
+    private JFrame frame;
+
+    private JPanel leftSide = new JPanel();
+    private JPanel centerSide = new JPanel();
+    private JPanel rightSide = new JPanel();
+    private JPanel bottomSide = new JPanel();
+
     private JLabel left1 = new JLabel();
     private JLabel middle1 = new JLabel();
     private JLabel left2 = new JLabel();
@@ -16,17 +24,12 @@ public class HUD extends JPanel {
     private JLabel left3 = new JLabel();
     private JLabel middle3 = new JLabel();
     private JLabel keyImage = new JLabel();
-    private JPanel leftSide = new JPanel();
-    private JPanel middleSide = new JPanel();
-    private JPanel rightSide = new JPanel();
-    private String moveMessage = "";
-    private String bonusMessage = "";
-    private JFrame frame;
+    private JLabel bottom = new JLabel();
 
     public HUD(JFrame frame, int width) {
         this.width = width;
 
-        height = 90;
+        height = 120;
 
         this.frame = frame;
 
@@ -46,25 +49,31 @@ public class HUD extends JPanel {
         middle1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
         middle3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
 
+        bottom.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        bottom.setText("ARROWS = move | ENTER = start battle | SPACE = strike in battle | ESC = exit battle");
+
         leftSide.setLayout(new GridLayout(3,1));
-        middleSide.setLayout(new GridLayout(3,1));
+        centerSide.setLayout(new GridLayout(3,1));
 
         leftSide.add(left1, "1");
         leftSide.add(left2, "3");
         leftSide.add(left3, "3");
 
-        middleSide.add(middle1, "1");
-        middleSide.add(middle2, "2");
-        middleSide.add(middle3, "3");
+        centerSide.add(middle1, "1");
+        centerSide.add(middle2, "2");
+        centerSide.add(middle3, "3");
         rightSide.add(keyImage);
+        bottomSide.add(bottom);
 
         leftSide.setBackground(Color.GRAY);
-        middleSide.setBackground(Color.GRAY);
+        centerSide.setBackground(Color.GRAY);
         rightSide.setBackground(Color.GRAY);
+        bottomSide.setBackground(Color.GRAY);
 
         this.add(leftSide, "West");
-        this.add(middleSide, "Center");
+        this.add(centerSide, "Center");
         this.add(rightSide, "East");
+        this.add(bottomSide, "South");
 
         frame.add(this, "South");
     }
@@ -77,26 +86,28 @@ public class HUD extends JPanel {
         left2.setText(String.valueOf(otherChar));
     }
 
-    public void setBattleMessage(Hero hero, GameCharacter otherChar) {
-        String heroMessage = hero + "  " + bonusMessage;
+    public void setEnemyMessage(String message) {
+        left2.setText(message);
+    }
 
-        left1.setText(heroMessage);
+    public void setBattleMessage(String message) {
+        left3.setText(message);
+    }
 
-        String otherCharMessage = otherChar + "  " + moveMessage;
+    public void setHeroStrikeMessage(String message) {
+        middle1.setText(message);
+    }
 
-        left2.setText(otherCharMessage);
+    public void setEnemyStrikeMessage(String message) {
+        middle2.setText(message);
+    }
+
+    public void setBonusMessage(String message) {
+        middle3.setText(message);
     }
 
     public void setKeyImage() {
         keyImage.setIcon(new ImageIcon("img/key.png"));
-    }
-
-    public void setKeyMessage(String moveMessage) {
-        this.moveMessage = moveMessage;
-    }
-
-    public void setBonusMessage(String bonusMessage) {
-        this.bonusMessage = bonusMessage;
     }
 
     public void clearKeyImage() {
