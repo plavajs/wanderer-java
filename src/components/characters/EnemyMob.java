@@ -10,7 +10,6 @@ import java.io.IOException;
 
 public class EnemyMob extends GameCharacter {
     private boolean keyHolder;
-    private int currentHealth;
 
     public EnemyMob(int posX, int posY) {
         super(posX, posY);
@@ -87,10 +86,10 @@ public class EnemyMob extends GameCharacter {
             e.printStackTrace();
         }
 
-        enemyMobClone.maxHealth = this.maxHealth;
-        enemyMobClone.currentHealth = this.currentHealth;
-        enemyMobClone.defencePoints = this.defencePoints;
-        enemyMobClone.strikePoints = this.strikePoints;
+        enemyMobClone.maxHealth = maxHealth;
+        enemyMobClone.currentHealth = currentHealth;
+        enemyMobClone.defencePoints = defencePoints;
+        enemyMobClone.strikePoints = strikePoints;
         return enemyMobClone;
     }
 
@@ -118,6 +117,11 @@ public class EnemyMob extends GameCharacter {
     @Override
     public boolean isAlive() {
         return currentHealth > 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Skeleton      HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
     }
 
 }

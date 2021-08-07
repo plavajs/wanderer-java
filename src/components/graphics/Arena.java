@@ -22,25 +22,6 @@ public class Arena extends JComponent {
     protected List<GameCharacter> gameCharacters;
     protected JFrame frame;
     private static int arenaLevel = 1;
-    protected HUD hud;
-
-    public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
-        this.gameCharacters = gameCharacters;
-
-        this.frame = frame;
-        linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
-        WIDTH = linesOfTiles.get(0).size() * STEP;
-        HEIGHT = linesOfTiles.size() * STEP;
-        WIDTH_BY_STEPS = WIDTH / STEP;
-        HEIGHT_BY_STEPS = HEIGHT / STEP;
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        hud = new HUD(frame, false);
-
-
-        this.frame.add(this, "North");
-    }
-
-    protected Arena() {}
 
     public static int getSTEP() {
         return STEP;
@@ -66,9 +47,25 @@ public class Arena extends JComponent {
         return arenaLevel;
     }
 
-    public HUD getHud() {
-        return hud;
+    public List<List<Tile>> getLinesOfTiles() {
+        return linesOfTiles;
     }
+
+    public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
+        this.gameCharacters = gameCharacters;
+        this.frame = frame;
+
+        linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
+        WIDTH = linesOfTiles.get(0).size() * STEP;
+        HEIGHT = linesOfTiles.size() * STEP;
+        WIDTH_BY_STEPS = WIDTH / STEP;
+        HEIGHT_BY_STEPS = HEIGHT / STEP;
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+        this.frame.add(this, "Center");
+    }
+
+    protected Arena() {}
 
     @Override
     public void paint(Graphics graphics) {
@@ -118,13 +115,5 @@ public class Arena extends JComponent {
             return linesOfTiles;
         }
         return new ArrayList<>();
-    }
-
-    public void setKey() {
-        hud.setKeyImage();
-    }
-
-    public List<List<Tile>> getLinesOfTiles() {
-        return linesOfTiles;
     }
 }

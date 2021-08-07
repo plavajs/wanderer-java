@@ -10,19 +10,22 @@ import java.io.IOException;
 
 public class Hero extends GameCharacter {
     private int heroLevel;
-    private int currentHealth;
     private boolean hasKey;
-
-    public int getHeroLevel() {
-        return heroLevel;
-    }
 
     public boolean hasKey() {
         return hasKey;
     }
 
+    public int getLevel() {
+        return heroLevel;
+    }
+
     public void setHasKey(boolean hasKey) {
         this.hasKey = hasKey;
+    }
+
+    public void setCurrentHealth(int newHealth) {
+        currentHealth = newHealth;
     }
 
     public Hero(int x0, int y0) {
@@ -41,6 +44,80 @@ public class Hero extends GameCharacter {
         heroLevel = 1;
         defencePoints = 2 * dice.roll();
         strikePoints = 5 + dice.roll();
+    }
+
+    @Override
+    public boolean moveX(int directionX, Arena arena) {
+        changeDirectionX(directionX);
+        if (validateStepX(directionX, arena)) {
+            posX += arena.getSTEP() * directionX;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean moveY(int directionY, Arena arena) {
+        changeDirectionY(directionY);
+        if (validateStepY(directionY, arena)) {
+            posY += arena.getSTEP() * directionY;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Hero clone(int x, int y) {
+        Hero heroClone = new Hero(x, y);
+
+        heroClone.filename = "img/hero-right.png";
+        try {
+            heroClone.image = ImageIO.read(new File(heroClone.filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        heroClone.currentHealth = currentHealth;
+        heroClone.maxHealth = maxHealth;
+        heroClone.defencePoints = defencePoints;
+        heroClone.strikePoints = strikePoints;
+        heroClone.heroLevel = heroLevel;
+        heroClone.hasKey = hasKey;
+
+        return heroClone;
+    }
+
+    @Override
+    public void getHit(int damage) {
+        currentHealth -= damage - defencePoints;
+        if (currentHealth < 0) {
+            currentHealth = 0;
+        }
+    }
+
+    @Override
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    @Override
+    public boolean isAlive() {
+        return currentHealth > 0;
+    }
+
+    @Override
+    public void strike(GameCharacter anotherChar) {
+        int damage = strikePoints + 2 * dice.roll();
+        if (anotherChar instanceof EnemyMob) {
+            if (damage > anotherChar.defencePoints) {
+                anotherChar.getHit(damage);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Hero (Lvl " + heroLevel + ")  HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
     }
 
     public void changeDirectionX(int directionX) {
@@ -91,49 +168,10 @@ public class Hero extends GameCharacter {
         return false;
     }
 
-    @Override
-    public boolean moveX(int directionX, Arena arena) {
-        changeDirectionX(directionX);
-        if (validateStepX(directionX, arena)) {
-            posX += arena.getSTEP() * directionX;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean moveY(int directionY, Arena arena) {
-        changeDirectionY(directionY);
-        if (validateStepY(directionY, arena)) {
-            posY += arena.getSTEP() * directionY;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Hero clone(int x, int y) {
-        Hero heroClone = new Hero(x, y);
-
-        heroClone.filename = "img/hero-right.png";
-        try {
-            heroClone.image = ImageIO.read(new File(heroClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        heroClone.maxHealth = maxHealth;
-        heroClone.currentHealth = currentHealth;
-        heroClone.heroLevel = heroLevel;
-        heroClone.defencePoints = defencePoints;
-        heroClone.strikePoints = strikePoints;
-        return heroClone;
-    }
-
     public void levelUp() {
         heroLevel++;
         maxHealth += dice.roll();
-        currentHealth += dice.roll();
+
         if (currentHealth > maxHealth) {
             currentHealth = maxHealth;
         }
@@ -141,35 +179,13 @@ public class Hero extends GameCharacter {
         strikePoints += dice.roll();
     }
 
-    public void setCurrentHealth(int newHealth) {
-        currentHealth = newHealth;
-    }
-
-    @Override
-    public void getHit(int damage) {
-        currentHealth -= damage - defencePoints;
-        if (currentHealth < 0) {
-            currentHealth = 0;
-        }
-    }
-
-    @Override
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    @Override
-    public boolean isAlive() {
-        return currentHealth > 0;
-    }
-
-    @Override
-    public void strike(GameCharacter anotherChar) {
-        int damage = strikePoints + 2 * dice.roll();
-        if (anotherChar instanceof EnemyMob) {
-            if (damage > anotherChar.defencePoints) {
-                anotherChar.getHit(damage);
-            }
-        }
+    public void copyStats(Hero otherHero) {
+        this.hasKey = otherHero.hasKey;
+        this.currentHealth = otherHero.currentHealth;
+        this.maxHealth = otherHero.maxHealth;
+        this.defencePoints = otherHero.defencePoints;
+        this.strikePoints = otherHero.strikePoints;
+        this.heroLevel = otherHero.heroLevel;
+        this.hasKey = otherHero.hasKey;
     }
 }

@@ -6,6 +6,7 @@ import components.characters.GameCharacter;
 import components.characters.Hero;
 import components.graphics.Arena;
 import components.graphics.BattleArena;
+import components.graphics.HUD;
 import components.graphics.Tile;
 
 import javax.swing.*;
@@ -27,6 +28,8 @@ public class Game extends JFrame implements KeyListener {
     private JFrame battleFrame;
     private BattleArena battle;
     private boolean inBattle;
+    private HUD mainHud;
+    private HUD battleHud;
 
     public boolean isInBattle() {
         return inBattle;
@@ -81,20 +84,19 @@ public class Game extends JFrame implements KeyListener {
     }
 
     private GameCharacter checkForMeeting() {
-        boolean meet = false;
         GameCharacter enemy = null;
+        boolean meet = false;
         for (GameCharacter c : enemyGameCharacters) {
             if (c.getPosX() == hero.getPosX() && c.getPosY() == hero.getPosY()) {
-                arena.getHud().setMoveMessage("Press ENTER to fight...");
-                arena.getHud().setMessage(hero, c);
+                mainHud.setKeyMessage("Press ENTER to fight...");
+                mainHud.setMessage(hero, c);
                 enemy = c;
                 meet = true;
             }
         }
-        if (!meet) {
-            arena.getHud().setMessage(hero);
+         if (!meet) {
+            mainHud.setMessage(hero);
         }
-
         return enemy;
     }
 
@@ -104,6 +106,12 @@ public class Game extends JFrame implements KeyListener {
         mainFrame.setLayout(new BorderLayout());
 
         arena = new Arena(allGameCharacters, mainFrame);
+        mainHud = new HUD(mainFrame, arena.getWidth());
+
+        battleFrame = new JFrame("Battle");
+        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        battleFrame.setLayout(new BorderLayout());
+        battleFrame.setVisible(false);
 
 //        mainFrame.setSize(new Dimension(Arena.getWIDTH(), Arena.getHEIGHT() + arena.getHud().getHEIGHT()));
         mainFrame.setLocation(300, 0);
@@ -141,26 +149,18 @@ public class Game extends JFrame implements KeyListener {
         if (inBattle) {
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 closeBattle();
-
             } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                if (battle.getHeroClone().isAlive()) {
+                if (battle.getHeroClone().isAlive() && battle.getEnemyClone().isAlive()) {
                     battle.getHeroClone().strike(battle.getEnemyClone());
                     if (battle.getEnemyClone().isAlive()) {
-                        System.out.println("alive");
                         battle.getEnemyClone().strike(battle.getHeroClone());
                     } else {
-
-                        battle.winnBattle();
-
-                        allGameCharacters.remove(battle.getBattledEnemy());
-                        enemyGameCharacters.remove(battle.getBattledEnemy());
-//                        closeBattle();
+                        winnBattle();
+                        allGameCharacters.remove(battle.getEnemy());
+                        enemyGameCharacters.remove(battle.getEnemy());
                     }
                 }
             }
-
-            battle.rewriteHud();
-            battle.repaint();
         } else {
             boolean heroMoved = false;
             checkKey();
@@ -189,7 +189,7 @@ public class Game extends JFrame implements KeyListener {
 // and redraw to have a new picture with the new coordinates
 //        System.out.println(hero.hasKey());
         checkForMeeting();
-        checkKey();
+
         arena.repaint();
     }
 
@@ -213,13 +213,24 @@ public class Game extends JFrame implements KeyListener {
         }
     }
 
+    public void initMainArena() {
+        mainFrame.remove(arena);
+        mainFrame.remove(mainHud);
+        arena = new Arena(allGameCharacters, mainFrame);
+        mainHud = new HUD(mainFrame, arena.getWidth());
+        checkKey();
+        checkForMeeting();
+    }
+
     public void initBattleArena(GameCharacter enemy) {
         inBattle = true;
         mainFrame.setVisible(false);
-        battleFrame = new JFrame("Battle");
-        battleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        battleFrame.setLayout(new BorderLayout());
+
         battle = new BattleArena(hero, enemy, battleFrame);
+
+        battleHud = new HUD(battleFrame, battle.getWidth());
+        battleHud.setKeyMessage("Press SPACE to strike...");
+        battleHud.setMessage(hero, enemy);
 
         battleFrame.setLocation(400,100);
         battleFrame.pack();
@@ -230,19 +241,48 @@ public class Game extends JFrame implements KeyListener {
 
     public void closeBattle() {
         inBattle = false;
+
+        battleFrame.remove(battleHud);
+        battleFrame.remove(battle);
+        battleFrame.dispose();
         battleFrame.setVisible(false);
+
         mainFrame.setVisible(true);
-        checkForMeeting();
-        arena = new Arena(allGameCharacters, mainFrame);
 
-
-        checkKey();
+        initMainArena();
     }
 
     public void checkKey() {
         if (hero.hasKey()) {
-            arena.getHud().setKeyImage();
+            mainHud.setKeyImage();
         }
     }
 
+    public void winnBattle() {
+        GameCharacter enemy = battle.getEnemy();
+
+        battle.getEnemyClone().die();
+        battle.repaint();
+        battle.getHeroClone().levelUp();
+        rewriteBattleHud();
+        if (enemy instanceof EnemyMob) {
+            if (((EnemyMob) enemy).isKeyHolder()) {
+                battle.getHeroClone().setHasKey(true);
+                battleHud.setKeyImage();
+                battleHud.setBonusMessage("You found the KEY!");
+            }
+        }
+        battleHud.setKeyMessage("Press ESC to exit battle...");
+
+        rewriteBattleHud();
+        hero.copyStats(battle.getHeroClone());
+    }
+
+    public void rewriteBattleHud() {
+        battleHud.setBattleMessage(battle.getHeroClone(), battle.getEnemyClone());
+    }
+
+    public void lostBattle() {
+
+    }
 }

@@ -1,6 +1,5 @@
 package components.graphics;
 
-import components.characters.Boss;
 import components.characters.GameCharacter;
 import components.characters.Hero;
 
@@ -10,113 +9,93 @@ import java.awt.*;
 public class HUD extends JPanel {
     private int width;
     private int height;
-    private JLabel firstLine;
-    private JLabel secondLine;
-    private JLabel keyImage;
-    private JPanel rightSide;
-    private JPanel leftSide;
+    private JLabel x1y1 = new JLabel();
+    private JLabel x2y1 = new JLabel();
+    private JLabel x1y2 = new JLabel();
+    private JLabel x2y2 = new JLabel();
+    private JLabel x1y3 = new JLabel();
+    private JLabel x2y3 = new JLabel();
+    private JLabel keyImage = new JLabel();
+    private JPanel rightSide = new JPanel();
+    private JPanel leftSide = new JPanel();
     private String moveMessage;
     private String bonusMessage = " ";
     private JFrame frame;
 
-    public HUD(JFrame frame, boolean inBattle) {
+    public HUD(JFrame frame, int width) {
+        this.width = width;
 
-        width = Arena.getWIDTH() - 90;
-
-        height = 90;
+        height = 100;
 
         this.frame = frame;
 
         setGraphics();
-
     }
 
     private void setGraphics() {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(width, height));
 
-        firstLine = new JLabel();
-        firstLine.setBorder(BorderFactory.createEmptyBorder(20, 5, 20, 0));
-        firstLine.setBackground(Color.GRAY);
+        x1y1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+        x2y1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+        x1y2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        x2y2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        x1y3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+        x2y3.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
 
-        secondLine = new JLabel();
-        secondLine.setBorder(BorderFactory.createEmptyBorder(0, 5, 20, 0));
+        leftSide.setLayout(new GridLayout(3,2));
 
-        leftSide = new JPanel();
-        leftSide.setLayout(new BorderLayout());
-        leftSide.add(firstLine, "North");
-        leftSide.add(secondLine, "South");
+        leftSide.add(x1y1, "1");
+        leftSide.add(x2y1, "2");
+        leftSide.add(x1y2, "3");
+        leftSide.add(x2y2, "4");
+        leftSide.add(x1y3, "5");
+        leftSide.add(x2y3, "6");
         leftSide.setBackground(Color.GRAY);
 
-        keyImage = new JLabel();
         keyImage.setPreferredSize(new Dimension(80, 80));
 
-        rightSide = new JPanel();
         rightSide.setBackground(Color.GRAY);
         rightSide.add(keyImage);
 
         this.add(rightSide, "East");
         this.add(leftSide, "Center");
 
-        frame.add(this, "Center");
+        frame.add(this, "South");
     }
 
     public void setMessage(Hero hero) {
-        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
-                "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike();
+        String heroMessage = String.valueOf(hero);
 
-        firstLine.setText(heroMessage);
-        secondLine.setText("");
+        x1y1.setText(heroMessage);
+        x1y2.setText("");
     }
 
     public void setMessage(Hero hero, GameCharacter otherChar) {
-        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
-                "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike();
+        String heroMessage = String.valueOf(hero);
 
-        firstLine.setText(heroMessage);
+        x1y1.setText(heroMessage);
 
-        String otherCharMessage;
-        if (otherChar instanceof Boss) {
-            otherCharMessage = "Boss ";
-        } else {
-            otherCharMessage = "Mob ";
-        }
-        otherCharMessage += "(Level " + Arena.getArenaLevel() + ") HP: " + otherChar.getCurrentHealth() + "/"
-                + otherChar.getMaxHealth() + "  |  DP: " + otherChar.getDefense() + "  |  SP: "
-                + otherChar.getStrike() + "  " + moveMessage;
+        String otherCharMessage = otherChar + "  " + moveMessage;
 
-        secondLine.setText(otherCharMessage);
+        x1y2.setText(otherCharMessage);
     }
 
     public void setBattleMessage(Hero hero, GameCharacter otherChar) {
-        String heroMessage = "Hero (Lvl " + hero.getHeroLevel() + ") HP: " + hero.getCurrentHealth() +
-                "/" + hero. getMaxHealth() + "  |  DP: " + hero.getDefense() + "  |  SP: " + hero.getStrike()
-                + "  " + bonusMessage;
+        String heroMessage = hero + "  " + bonusMessage;
 
-        firstLine.setText(heroMessage);
+        x1y1.setText(heroMessage);
 
-        String otherCharMessage;
-        if (otherChar instanceof Boss) {
-            otherCharMessage = "Boss ";
-        } else {
-            otherCharMessage = "Mob ";
-        }
-        otherCharMessage += "(Lvl " + Arena.getArenaLevel() + ") HP: " + otherChar.getCurrentHealth() + "/"
-                + otherChar.getMaxHealth() + "  |  DP: " + otherChar.getDefense() + "  |  SP: "
-                + otherChar.getStrike() + "  " + moveMessage;
+        String otherCharMessage = otherChar + "  " + moveMessage;
 
-        secondLine.setText(otherCharMessage);
+        x1y2.setText(otherCharMessage);
     }
 
     public void setKeyImage() {
-        keyImage = new JLabel((new ImageIcon("img/key.png")), JLabel.CENTER);
-        rightSide = new JPanel();
-        rightSide.setBackground(Color.GRAY);
-        rightSide.add(keyImage);
-        this.add(rightSide, "East");
+        keyImage.setIcon(new ImageIcon("img/key.png"));
     }
 
-    public void setMoveMessage(String moveMessage) {
+    public void setKeyMessage(String moveMessage) {
         this.moveMessage = moveMessage;
     }
 
@@ -124,15 +103,8 @@ public class HUD extends JPanel {
         this.bonusMessage = bonusMessage;
     }
 
-    public void clearKeyImage(Frame frame) {
-        keyImage = new JLabel();
-        JPanel rightSide = new JPanel();
-        rightSide.setBackground(Color.GRAY);
-        rightSide.add(keyImage);
-        frame.add(rightSide, "East");
-    }
+//    public void clearKeyImage(Frame frame) {
+//        keyImage = ;
+//    }
 
-    public int getHEIGHT() {
-        return height;
-    }
 }

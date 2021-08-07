@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Boss extends GameCharacter {
-    private int currentHealth;
 
     public Boss(int posX, int posY) {
         super(posX, posY);
@@ -71,17 +70,17 @@ public class Boss extends GameCharacter {
     public Boss clone(int x, int y) {
         Boss bossClone = new Boss(x, y);
 
-        bossClone.filename = "img/skeleton.png";
+        bossClone.filename = "img/boss.png";
         try {
             bossClone.image = ImageIO.read(new File(bossClone.filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        bossClone.maxHealth = this.maxHealth;
-        bossClone.currentHealth = this.currentHealth;
-        bossClone.defencePoints = this.defencePoints;
-        bossClone.strikePoints = this.strikePoints;
+        bossClone.maxHealth = maxHealth;
+        bossClone.currentHealth = currentHealth;
+        bossClone.defencePoints = defencePoints;
+        bossClone.strikePoints = strikePoints;
         return bossClone;
     }
 
@@ -106,5 +105,10 @@ public class Boss extends GameCharacter {
         if (damage > anotherChar.defencePoints) {
             anotherChar.getHit(damage);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Boss             HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
     }
 }

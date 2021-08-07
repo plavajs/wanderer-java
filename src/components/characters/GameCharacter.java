@@ -4,6 +4,10 @@ import components.Dice;
 import components.PositionedImage;
 import components.graphics.Arena;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 public abstract class GameCharacter extends PositionedImage {
     protected int currentHealth;
     protected int maxHealth;
@@ -44,4 +48,16 @@ public abstract class GameCharacter extends PositionedImage {
     public abstract int getCurrentHealth();
 
     public abstract boolean isAlive();
+
+    public void setCharIcon(String filename) {
+        try {
+            image = ImageIO.read(new File(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void die() {
+        this.setCharIcon("img/blood.png");
+    }
 }
