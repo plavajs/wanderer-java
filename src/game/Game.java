@@ -109,7 +109,6 @@ public class Game extends JFrame implements KeyListener {
         battleFrame.setLayout(new BorderLayout());
         battleFrame.setVisible(false);
 
-//        mainFrame.setSize(new Dimension(Arena.getWIDTH(), Arena.getHEIGHT() + arena.getHud().getHEIGHT()));
         mainFrame.setLocation(300, 0);
         mainFrame.pack();
         mainFrame.setVisible(true);
@@ -155,7 +154,17 @@ public class Game extends JFrame implements KeyListener {
                         allGameCharacters.remove(battle.getEnemy());
                         enemyGameCharacters.remove(battle.getEnemy());
                     }
+                } else if (!battle.getHeroClone().isAlive()) {
+                    battle.getHeroClone().die();
+                    lossBattle();
+                    battle.repaint();
+
+                    if (e.getKeyCode() == KeyEvent.VK_R) {
+                        restartGame();
+                        closeBattle();
+                    }
                 }
+
             }
         } else {
             boolean heroMoved = false;
@@ -214,6 +223,7 @@ public class Game extends JFrame implements KeyListener {
         mainFrame.remove(mainHud);
         arena = new Arena(allGameCharacters, mainFrame);
         mainHud = new HUD(mainFrame, arena.getWidth());
+        mainHud.setHeroMessage(hero);
         checkKey();
         checkForMeeting();
     }
@@ -246,6 +256,7 @@ public class Game extends JFrame implements KeyListener {
         mainFrame.setVisible(true);
 
         initMainArena();
+        mainFrame.pack();
     }
 
     public void checkKey() {
@@ -268,7 +279,7 @@ public class Game extends JFrame implements KeyListener {
                 battleHud.setBonusMessage("You found the KEY!");
             }
         }
-        battleHud.setBonusMessage("Press ESC to exit battle...");
+        battleHud.setBattleMessage("You won the battle!");
 
         battleHud.repaint();
         hero.copyStats(battle.getHeroClone());
@@ -278,7 +289,22 @@ public class Game extends JFrame implements KeyListener {
 //        battleHud.setBattleMessage(battle.getHeroClone(), battle.getEnemyClone());
 //    }
 
-    public void lostBattle() {
+    public void lossBattle() {
+        battleHud.setBattleMessage("You lost the battle...");
+        battleHud.setBonusMessage("Press 'R' to restart game!");
+    }
 
+    public void restartGame() {
+        allGameCharacters = new ArrayList<>();
+        enemyGameCharacters = new ArrayList<>();
+        heroStepCounter = 0;
+        inBattle = false;
+
+        initGraphics();
+        initCharacters();
+        mainHud.setHeroMessage(hero);
+
+        checkForMeeting();
+        giveRandomMobTheKey();
     }
 }
