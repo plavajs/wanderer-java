@@ -20,10 +20,10 @@ public class Boss extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 4 * Arena.getArenaLevel() * dice.roll() + dice.roll();
+        maxHealth = 2 * Arena.getArenaLevel() * dice.roll() + dice.roll();
         currentHealth = maxHealth;
-        defencePoints = 2 * Arena.getArenaLevel() / 2 * dice.roll() + dice.roll() / 2;
-        strikePoints = 2 * Arena.getArenaLevel() * dice.roll() + Arena.getArenaLevel();
+        defencePoints = Arena.getArenaLevel() / 2 * dice.roll() + dice.roll() / 2;
+        strikePoints = Arena.getArenaLevel() * dice.roll() + Arena.getArenaLevel();
     }
 
     @Override
@@ -87,7 +87,6 @@ public class Boss extends GameCharacter {
     @Override
     public void getHit(int damage) {
         currentHealth -= damage - defencePoints;
-        System.out.println(damage - defencePoints);
     }
 
     @Override
@@ -111,5 +110,12 @@ public class Boss extends GameCharacter {
     @Override
     public String toString() {
         return "Boss             HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
+    }
+
+    public void copyStats(Boss otherBoss) {
+        this.currentHealth = otherBoss.currentHealth;
+        this.maxHealth = otherBoss.maxHealth;
+        this.defencePoints = otherBoss.defencePoints;
+        this.strikePoints = otherBoss.strikePoints;
     }
 }

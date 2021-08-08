@@ -30,12 +30,17 @@ public class Game extends JFrame implements KeyListener {
     private boolean inBattle;
     private HUD mainHud;
     private HUD battleHud;
+    private boolean arenaCleared;
 
     public Game() {
         allGameCharacters = new ArrayList<>();
         enemyGameCharacters = new ArrayList<>();
         heroStepCounter = 0;
         inBattle = false;
+        arenaCleared = false;
+
+        hero = new Hero(0, 0);
+        allGameCharacters.add(hero);
 
         initGraphics();
         initCharacters();
@@ -46,9 +51,6 @@ public class Game extends JFrame implements KeyListener {
     }
 
     private void initCharacters() {
-        hero = new Hero(0, 0);
-        allGameCharacters.add(hero);
-
         Tile buffTile = generateValidSpawnTile();
         boss = new Boss(buffTile.getPosX(), buffTile.getPosY());
         enemyGameCharacters.add(boss);
@@ -160,11 +162,15 @@ public class Game extends JFrame implements KeyListener {
                     battle.repaint();
 
                     if (e.getKeyCode() == KeyEvent.VK_R) {
-                        restartGame();
+//                        restartGame();
                         closeBattle();
                     }
                 }
 
+            }
+        } else if (arenaCleared) {
+            if (e.getKeyCode() == KeyEvent.VK_R) {
+                reachNewLevel();
             }
         } else {
             boolean heroMoved = false;
@@ -192,9 +198,9 @@ public class Game extends JFrame implements KeyListener {
         }
 
 // and redraw to have a new picture with the new coordinates
-//        System.out.println(hero.hasKey());
-        checkForMeeting();
 
+        checkForMeeting();
+        checkArena();
         arena.repaint();
     }
 
@@ -259,9 +265,26 @@ public class Game extends JFrame implements KeyListener {
         mainFrame.pack();
     }
 
-    public void checkKey() {
+    public boolean checkKey() {
         if (hero.hasKey()) {
             mainHud.setKeyImage();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkBoss() {
+        if (!boss.isAlive()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void checkArena() {
+        if (checkKey() && checkBoss()) {
+            mainHud.setBattleMessage("You succeed in this Arena!");
+            mainHud.setBonusMessage("Press 'R' to claim new Arena...");
+            arenaCleared = true;
         }
     }
 
@@ -278,6 +301,8 @@ public class Game extends JFrame implements KeyListener {
                 battleHud.setKeyImage();
                 battleHud.setBonusMessage("You found the KEY!");
             }
+        } else {
+            boss.copyStats((Boss)battle.getEnemyClone());
         }
         battleHud.setBattleMessage("You won the battle!");
 
@@ -285,22 +310,22 @@ public class Game extends JFrame implements KeyListener {
         hero.copyStats(battle.getHeroClone());
     }
 
-//    public void rewriteBattleHud() {
-//        battleHud.setBattleMessage(battle.getHeroClone(), battle.getEnemyClone());
-//    }
-
     public void lossBattle() {
         battleHud.setBattleMessage("You lost the battle...");
         battleHud.setBonusMessage("Press 'R' to restart game!");
     }
 
-    public void restartGame() {
+    public void reachNewLevel() {
+        Arena.leveUp();
         allGameCharacters = new ArrayList<>();
         enemyGameCharacters = new ArrayList<>();
         heroStepCounter = 0;
         inBattle = false;
+        arenaCleared = false;
 
-        initGraphics();
+        allGameCharacters.add(hero);
+
+        initMainArena();
         initCharacters();
         mainHud.setHeroMessage(hero);
 

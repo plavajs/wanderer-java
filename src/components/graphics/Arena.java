@@ -51,11 +51,20 @@ public class Arena extends JComponent {
         return linesOfTiles;
     }
 
+    public static void leveUp() {
+        arenaLevel++;
+    }
+
     public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
         this.gameCharacters = gameCharacters;
         this.frame = frame;
 
-        linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
+        if (arenaLevel < 3) {
+            linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
+        } else {
+            linesOfTiles = loadArena("arenas/lvl-" + (arenaLevel / 3) + ".txt");
+        }
+
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;
         WIDTH_BY_STEPS = WIDTH / STEP;

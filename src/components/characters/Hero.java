@@ -185,6 +185,5 @@ public class Hero extends GameCharacter {
         this.defencePoints = otherHero.defencePoints;
         this.strikePoints = otherHero.strikePoints;
         this.heroLevel = otherHero.heroLevel;
-        this.hasKey = otherHero.hasKey;
     }
 }
