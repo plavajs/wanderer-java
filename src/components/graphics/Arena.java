@@ -22,6 +22,7 @@ public class Arena extends JComponent {
     protected List<GameCharacter> gameCharacters;
     protected JFrame frame;
     private static int arenaLevel = 1;
+    private static int arenaMaze = 1;
 
     public static int getSTEP() {
         return STEP;
@@ -53,17 +54,17 @@ public class Arena extends JComponent {
 
     public static void leveUp() {
         arenaLevel++;
+        arenaMaze++;
+        if (arenaMaze > 5) {
+            arenaMaze = 1;
+        }
     }
 
     public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
         this.gameCharacters = gameCharacters;
         this.frame = frame;
 
-        if (arenaLevel < 3) {
-            linesOfTiles = loadArena("arenas/lvl-" + arenaLevel + ".txt");
-        } else {
-            linesOfTiles = loadArena("arenas/lvl-" + (arenaLevel / 3) + ".txt");
-        }
+        linesOfTiles = loadArena("arenas/lvl-" + arenaMaze + ".txt");
 
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;

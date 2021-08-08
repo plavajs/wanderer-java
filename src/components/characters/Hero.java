@@ -108,7 +108,6 @@ public class Hero extends GameCharacter {
     @Override
     public void strike(GameCharacter anotherChar) {
         int damage = strikePoints + 2 * dice.roll();
-        System.out.println(anotherChar);
             if (damage > anotherChar.defencePoints) {
                 anotherChar.getHit(damage);
         }

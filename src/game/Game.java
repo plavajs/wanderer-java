@@ -76,7 +76,7 @@ public class Game extends JFrame implements KeyListener {
         Tile buffTile;
         do {
             int rndX = rnd.nextInt(arena.getWidthBySteps());
-            int rndY = rnd.nextInt(arena.getWidthBySteps());
+            int rndY = rnd.nextInt(arena.getHeightBySteps());
             buffTile = arena.getLinesOfTiles().get(rndY).get(rndX);
         } while (!buffTile.isPassAble());
         return buffTile;
@@ -270,6 +270,7 @@ public class Game extends JFrame implements KeyListener {
             mainHud.setKeyImage();
             return true;
         }
+        mainHud.clearKeyImage();
         return false;
     }
 
@@ -323,12 +324,20 @@ public class Game extends JFrame implements KeyListener {
         inBattle = false;
         arenaCleared = false;
 
+        hero.setPosX(0);
+        hero.setPosY(0);
+        hero.setHasKey(false);
         allGameCharacters.add(hero);
 
+        mainFrame.setResizable(true);
         initMainArena();
+        mainFrame.pack();
+        mainFrame.setResizable(false);
+
         initCharacters();
         mainHud.setHeroMessage(hero);
 
+        checkKey();
         checkForMeeting();
         giveRandomMobTheKey();
     }
