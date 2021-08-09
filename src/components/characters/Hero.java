@@ -38,12 +38,14 @@ public class Hero extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 20 + 3 * dice.roll();
+        maxHealth = 5 + 3 * dice.roll();
         currentHealth = maxHealth;
         hasKey = false;
         heroLevel = 1;
-        defencePoints = 2 * dice.roll();
-        strikePoints = 5 + dice.roll();
+        defencePoints = 2 + dice.roll() / 2;
+        strikePoints = 3 + dice.roll();
+
+        strikeMessage = "";
     }
 
     @Override
@@ -107,9 +109,10 @@ public class Hero extends GameCharacter {
 
     @Override
     public void strike(GameCharacter anotherChar) {
-        int damage = strikePoints + 2 * dice.roll();
-            if (damage > anotherChar.defencePoints) {
-                anotherChar.getHit(damage);
+        int damage = strikePoints + dice.roll();
+        strikeMessage = "strikes for " + damage + " damage";
+        if (damage > anotherChar.defencePoints) {
+            anotherChar.getHit(damage);
         }
     }
 
@@ -169,12 +172,12 @@ public class Hero extends GameCharacter {
     public void levelUp() {
         heroLevel++;
         maxHealth += dice.roll();
-
+        currentHealth += dice.roll();
         if (currentHealth > maxHealth) {
             currentHealth = maxHealth;
         }
-        defencePoints += dice.roll();
-        strikePoints += dice.roll();
+        defencePoints += dice.roll() / 2;
+        strikePoints += dice.roll() / 2;
     }
 
     public void copyStats(Hero otherHero) {
@@ -185,4 +188,5 @@ public class Hero extends GameCharacter {
         this.strikePoints = otherHero.strikePoints;
         this.heroLevel = otherHero.heroLevel;
     }
+
 }

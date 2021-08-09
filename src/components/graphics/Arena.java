@@ -60,6 +60,11 @@ public class Arena extends JComponent {
         }
     }
 
+    public static void levelOne() {
+        arenaLevel = 1;
+        arenaMaze = 1;
+    }
+
     public Arena(ArrayList<GameCharacter> gameCharacters, JFrame frame) {
         this.gameCharacters = gameCharacters;
         this.frame = frame;

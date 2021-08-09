@@ -144,29 +144,33 @@ public class Game extends JFrame implements KeyListener {
 
         // When the up or down keys hit, we change the position of our box
         if (inBattle) {
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (!battle.getHeroClone().isAlive()) {
+                if (e.getKeyCode() == KeyEvent.VK_R) {
+                    closeBattle();
+                    restartGame();
+                }
+            } else
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 closeBattle();
             } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                 if (battle.getHeroClone().isAlive() && battle.getEnemyClone().isAlive()) {
                     battle.getHeroClone().strike(battle.getEnemyClone());
+                    battleHud.setEnemyMessage(battle.getEnemyClone());
+                    battleHud.setHeroStrikeMessage(battle.getHeroClone().getStrikeMessage());
                     if (battle.getEnemyClone().isAlive()) {
                         battle.getEnemyClone().strike(battle.getHeroClone());
+                        battleHud.setHeroMessage(battle.getHeroClone());
+                        battleHud.setEnemyStrikeMessage(battle.getEnemyClone().getStrikeMessage());
+                        if (!(battle.getHeroClone().isAlive())) {
+                            lossBattle();
+                            battle.repaint();
+                        }
                     } else {
                         winnBattle();
                         allGameCharacters.remove(battle.getEnemy());
                         enemyGameCharacters.remove(battle.getEnemy());
                     }
-                } else if (!battle.getHeroClone().isAlive()) {
-                    battle.getHeroClone().die();
-                    lossBattle();
-                    battle.repaint();
-
-                    if (e.getKeyCode() == KeyEvent.VK_R) {
-//                        restartGame();
-                        closeBattle();
-                    }
                 }
-
             }
         } else if (arenaCleared) {
             if (e.getKeyCode() == KeyEvent.VK_R) {
@@ -284,7 +288,7 @@ public class Game extends JFrame implements KeyListener {
     public void checkArena() {
         if (checkKey() && checkBoss()) {
             mainHud.setBattleMessage("You succeed in this Arena!");
-            mainHud.setBonusMessage("Press 'R' to claim new Arena...");
+            mainHud.setBonusMessage("Press 'R' to reach new Arena...");
             arenaCleared = true;
         }
     }
@@ -306,12 +310,15 @@ public class Game extends JFrame implements KeyListener {
             boss.copyStats((Boss)battle.getEnemyClone());
         }
         battleHud.setBattleMessage("You won the battle!");
-
+        battleHud.setHeroMessage(battle.getHeroClone());
         battleHud.repaint();
         hero.copyStats(battle.getHeroClone());
     }
 
     public void lossBattle() {
+        battle.getHeroClone().die();
+        battle.repaint();
+
         battleHud.setBattleMessage("You lost the battle...");
         battleHud.setBonusMessage("Press 'R' to restart game!");
     }
@@ -341,4 +348,25 @@ public class Game extends JFrame implements KeyListener {
         checkForMeeting();
         giveRandomMobTheKey();
     }
+
+    public void restartGame() {
+        Arena.levelOne();
+        allGameCharacters = new ArrayList<>();
+        enemyGameCharacters = new ArrayList<>();
+        heroStepCounter = 0;
+        inBattle = false;
+        arenaCleared = false;
+
+        hero = new Hero(0, 0);
+        allGameCharacters.add(hero);
+
+        mainFrame.dispose();
+        initGraphics();
+        initCharacters();
+        mainHud.setHeroMessage(hero);
+
+        checkForMeeting();
+        giveRandomMobTheKey();
+    }
+
 }

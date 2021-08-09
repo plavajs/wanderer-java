@@ -21,10 +21,12 @@ public class EnemyMob extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 2 * Arena.getArenaLevel() * dice.roll();
+        maxHealth = 3 * Arena.getArenaLevel() * dice.roll();
         currentHealth = maxHealth;
-        defencePoints = Arena.getArenaLevel() / 2 * dice.roll();
-        strikePoints = Arena.getArenaLevel() * dice.roll();
+        defencePoints = Arena.getArenaLevel()  * dice.roll();
+        strikePoints = 2 * Arena.getArenaLevel() * dice.roll();
+
+        strikeMessage = "";
     }
 
     public boolean isKeyHolder() {
@@ -95,7 +97,8 @@ public class EnemyMob extends GameCharacter {
 
     @Override
     public void strike(GameCharacter anotherChar) {
-        int damage = strikePoints + 2 * dice.roll();
+        int damage = strikePoints + dice.roll();
+        strikeMessage = "strikes for " + damage + " damage";
         if (damage > anotherChar.defencePoints) {
             anotherChar.getHit(damage);
         }

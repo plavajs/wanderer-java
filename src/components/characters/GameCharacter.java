@@ -14,6 +14,7 @@ public abstract class GameCharacter extends PositionedImage {
     protected int defencePoints;
     protected int strikePoints;
     protected Dice dice;
+    protected String strikeMessage;
 
     public int getMaxHealth() {
         return maxHealth;
@@ -59,5 +60,9 @@ public abstract class GameCharacter extends PositionedImage {
 
     public void die() {
         this.setCharIcon("img/blood.png");
+    }
+
+    public String getStrikeMessage() {
+        return strikeMessage;
     }
 }
