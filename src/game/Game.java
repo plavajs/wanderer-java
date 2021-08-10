@@ -57,7 +57,7 @@ public class Game extends JFrame implements KeyListener {
         allGameCharacters.add(boss);
 
         rnd = new Random();
-        for (int i = 0; i < 5 + arena.getArenaLevel(); i++) {
+        for (int i = 0; i < 5 + arena.getArenaLevel() / 2; i++) {
             buffTile = generateValidSpawnTile();
             EnemyMob buffChar = new EnemyMob(buffTile.getPosX(), buffTile.getPosY());
             enemyGameCharacters.add(buffChar);
@@ -122,7 +122,7 @@ public class Game extends JFrame implements KeyListener {
         // The board object will be notified when hitting any key
         // with the system calling one of the below 3 methods
         mainFrame.addKeyListener(this);
-
+        mainFrame.repaint(  );
         // Notice (at the top) that we can only do this
         // because this Board class (the type of the board object) is also a KeyListener
     }
@@ -149,18 +149,19 @@ public class Game extends JFrame implements KeyListener {
                     closeBattle();
                     restartGame();
                 }
-            } else
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 closeBattle();
-            } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                if (battle.getHeroClone().isAlive() && battle.getEnemyClone().isAlive()) {
+            } else if (battle.getHeroClone().isAlive() && battle.getEnemyClone().isAlive()) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     battle.getHeroClone().strike(battle.getEnemyClone());
                     battleHud.setEnemyMessage(battle.getEnemyClone());
                     battleHud.setHeroStrikeMessage(battle.getHeroClone().getStrikeMessage());
+                    battle.getHeroClone().setStrikeMessage("");
                     if (battle.getEnemyClone().isAlive()) {
                         battle.getEnemyClone().strike(battle.getHeroClone());
                         battleHud.setHeroMessage(battle.getHeroClone());
                         battleHud.setEnemyStrikeMessage(battle.getEnemyClone().getStrikeMessage());
+                        battle.getEnemyClone().setStrikeMessage("");
                         if (!(battle.getHeroClone().isAlive())) {
                             lossBattle();
                             battle.repaint();
@@ -253,18 +254,23 @@ public class Game extends JFrame implements KeyListener {
         battleFrame.setVisible(true);
 
         battleFrame.addKeyListener(this);
+
+        battleFrame.repaint();
     }
 
     public void closeBattle() {
         inBattle = false;
 
+        battleFrame.removeKeyListener(this);
         battleFrame.remove(battleHud);
         battleFrame.remove(battle);
         battleFrame.dispose();
         battleFrame.setVisible(false);
 
-        mainFrame.setVisible(true);
+        hero.copyStats(battle.getHeroClone());
+        battle.getEnemy().copyStats(battle.getEnemyClone());
 
+        mainFrame.setVisible(true);
         initMainArena();
         mainFrame.pack();
     }

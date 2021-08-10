@@ -21,10 +21,10 @@ public class EnemyMob extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 3 * Arena.getArenaLevel() * dice.roll();
+        maxHealth = 5 * Arena.getArenaLevel() + dice.roll() * 3 - 3;
         currentHealth = maxHealth;
-        defencePoints = Arena.getArenaLevel()  * dice.roll();
-        strikePoints = 2 * Arena.getArenaLevel() * dice.roll();
+        defencePoints = Arena.getArenaLevel() + dice.roll() - 3;
+        strikePoints = Arena.getArenaLevel() * 2 + dice.roll() - 3;
 
         strikeMessage = "";
     }
@@ -97,8 +97,8 @@ public class EnemyMob extends GameCharacter {
 
     @Override
     public void strike(GameCharacter anotherChar) {
-        int damage = strikePoints + dice.roll();
-        strikeMessage = "strikes for " + damage + " damage";
+        int damage = strikePoints + dice.roll() / 2;
+        strikeMessage = "s  trikes for " + damage + " damage";
         if (damage > anotherChar.defencePoints) {
             anotherChar.getHit(damage);
         }
@@ -106,7 +106,8 @@ public class EnemyMob extends GameCharacter {
 
     @Override
     public void getHit(int damage) {
-        currentHealth -= damage - defencePoints;
+        int damageTaken = damage - defencePoints;
+        currentHealth -= damageTaken;
         if (currentHealth < 0) {
             currentHealth = 0;
         }
@@ -126,5 +127,4 @@ public class EnemyMob extends GameCharacter {
     public String toString() {
         return "Skeleton      HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
     }
-
 }

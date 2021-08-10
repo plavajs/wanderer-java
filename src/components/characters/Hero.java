@@ -3,6 +3,7 @@ package components.characters;
 import components.Dice;
 import components.graphics.Arena;
 import components.graphics.Tile;
+import game.Game;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -38,12 +39,12 @@ public class Hero extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 5 + 3 * dice.roll();
+        maxHealth = 8   + 3 * dice.roll();
         currentHealth = maxHealth;
         hasKey = false;
         heroLevel = 1;
-        defencePoints = 2 + dice.roll() / 2;
-        strikePoints = 3 + dice.roll();
+        defencePoints = 2 + dice.roll() / 3;
+        strikePoints = 3 + dice.roll() / 2;
 
         strikeMessage = "";
     }
@@ -91,7 +92,8 @@ public class Hero extends GameCharacter {
 
     @Override
     public void getHit(int damage) {
-        currentHealth -= damage - defencePoints;
+        int damageTaken = damage - defencePoints;
+        currentHealth -= damageTaken;
         if (currentHealth < 0) {
             currentHealth = 0;
         }
@@ -109,7 +111,7 @@ public class Hero extends GameCharacter {
 
     @Override
     public void strike(GameCharacter anotherChar) {
-        int damage = strikePoints + dice.roll();
+        int damage = strikePoints + dice.roll() / 2;
         strikeMessage = "strikes for " + damage + " damage";
         if (damage > anotherChar.defencePoints) {
             anotherChar.getHit(damage);
@@ -119,6 +121,17 @@ public class Hero extends GameCharacter {
     @Override
     public String toString() {
         return "Hero (Lvl " + heroLevel + ")  HP: " + currentHealth + "/" + maxHealth + " | DP: " + defencePoints + " | SP: " + strikePoints;
+    }
+
+    @Override
+    public void copyStats(GameCharacter otherChar) {
+        Hero otherHero = (Hero)otherChar;
+        this.hasKey = otherHero.hasKey;
+        this.currentHealth = otherHero.currentHealth;
+        this.maxHealth = otherHero.maxHealth;
+        this.defencePoints = otherHero.defencePoints;
+        this.strikePoints = otherHero.strikePoints;
+        this.heroLevel = otherHero.heroLevel;
     }
 
     public void changeDirectionX(int directionX) {
@@ -176,17 +189,7 @@ public class Hero extends GameCharacter {
         if (currentHealth > maxHealth) {
             currentHealth = maxHealth;
         }
-        defencePoints += dice.roll() / 2;
-        strikePoints += dice.roll() / 2;
+        defencePoints += dice.roll() / 3    ;
+        strikePoints += dice.roll() / 3;
     }
-
-    public void copyStats(Hero otherHero) {
-        this.hasKey = otherHero.hasKey;
-        this.currentHealth = otherHero.currentHealth;
-        this.maxHealth = otherHero.maxHealth;
-        this.defencePoints = otherHero.defencePoints;
-        this.strikePoints = otherHero.strikePoints;
-        this.heroLevel = otherHero.heroLevel;
-    }
-
 }

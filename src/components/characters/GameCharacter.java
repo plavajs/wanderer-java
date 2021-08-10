@@ -65,4 +65,15 @@ public abstract class GameCharacter extends PositionedImage {
     public String getStrikeMessage() {
         return strikeMessage;
     }
+
+    public void setStrikeMessage(String strikeMessage) {
+        this.strikeMessage = strikeMessage;
+    }
+
+    public void copyStats(GameCharacter otherChar) {
+        this.currentHealth = otherChar.currentHealth;
+        this.maxHealth = otherChar.maxHealth;
+        this.defencePoints = otherChar.defencePoints;
+        this.strikePoints = otherChar.strikePoints;
+    }
 }

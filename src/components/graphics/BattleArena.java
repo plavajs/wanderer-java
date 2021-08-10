@@ -39,7 +39,7 @@ public class BattleArena extends Arena {
         this.frame = frame;
         this.enemy = enemy;
         heroClone = hero.clone(2 * STEP, 2 * STEP);
-        enemyClone = enemy.clone(4 * STEP, 2 * STEP);
+        enemyClone = this.enemy.clone(4 * STEP, 2 * STEP);
         gameCharacters = new ArrayList<>();
         gameCharacters.add(heroClone);
         gameCharacters.add(enemyClone);
