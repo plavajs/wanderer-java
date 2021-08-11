@@ -39,7 +39,7 @@ public class Hero extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 8   + 3 * dice.roll();
+        maxHealth = 8 + 3 * dice.roll();
         currentHealth = maxHealth;
         hasKey = false;
         heroLevel = 1;
@@ -184,12 +184,12 @@ public class Hero extends GameCharacter {
 
     public void levelUp() {
         heroLevel++;
-        maxHealth += dice.roll();
-        currentHealth += dice.roll();
+        maxHealth += dice.roll() / 2;
+        currentHealth = maxHealth;
         if (currentHealth > maxHealth) {
             currentHealth = maxHealth;
         }
-        defencePoints += dice.roll() / 3    ;
-        strikePoints += dice.roll() / 3;
+        defencePoints += dice.roll() / 4;
+        strikePoints += dice.roll() / 4;
     }
 }

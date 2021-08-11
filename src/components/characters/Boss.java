@@ -20,10 +20,10 @@ public class Boss extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 5 + 5 * Arena.getArenaLevel() + dice.roll() * 3;
+        maxHealth = 5 + 4 * Arena.getArenaLevel() + dice.roll() * 3 * Arena.getArenaLevel();
         currentHealth = maxHealth;
-        defencePoints = 2 + Arena.getArenaLevel() * 2 + dice.roll();
-        strikePoints = 3 + Arena.getArenaLevel() * 2 + dice.roll();
+        defencePoints = 2 + Arena.getArenaLevel() * 2 + dice.roll() * Arena.getArenaLevel();
+        strikePoints = 3 + Arena.getArenaLevel() * 3 + dice.roll() * Arena.getArenaLevel();
 
         strikeMessage = "";
     }

@@ -21,10 +21,10 @@ public class EnemyMob extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 5 * Arena.getArenaLevel() + dice.roll() * 3 - 3;
+        maxHealth = 5 * Arena.getArenaLevel() + dice.roll() * 2 * Arena.getArenaLevel();
         currentHealth = maxHealth;
-        defencePoints = Arena.getArenaLevel() + dice.roll() - 3;
-        strikePoints = Arena.getArenaLevel() * 2 + dice.roll() - 3;
+        defencePoints = Arena.getArenaLevel() * 2 + dice.roll() / 3 * Arena.getArenaLevel();
+        strikePoints = Arena.getArenaLevel() * 3 + dice.roll() / 2   * Arena.getArenaLevel();
 
         strikeMessage = "";
     }
