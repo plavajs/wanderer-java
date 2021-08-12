@@ -31,7 +31,7 @@ public class Hero extends GameCharacter {
 
     public Hero(int x0, int y0) {
         super(x0, y0);
-        filename = "img/hero-down.png";
+        filename = "resources/img/hero-down.png";
         try {
             image = ImageIO.read(new File(filename));
         } catch (IOException e) {
@@ -73,7 +73,7 @@ public class Hero extends GameCharacter {
     public Hero clone(int x, int y) {
         Hero heroClone = new Hero(x, y);
 
-        heroClone.filename = "img/hero-right.png";
+        heroClone.filename = "resources/img/hero-right.png";
         try {
             heroClone.image = ImageIO.read(new File(heroClone.filename));
         } catch (IOException e) {
@@ -136,9 +136,9 @@ public class Hero extends GameCharacter {
 
     public void changeDirectionX(int directionX) {
         if (directionX > 0) {
-            filename = "img/hero-right.png";
+            filename = "resources/img/hero-right.png";
         } else {
-            filename = "img/hero-left.png";
+            filename = "resources/img/hero-left.png";
         }
 
         try {
@@ -150,9 +150,9 @@ public class Hero extends GameCharacter {
 
     public void changeDirectionY(int directionY) {
         if (directionY > 0) {
-            filename = "img/hero-down.png";
+            filename = "resources/img/hero-down.png";
         } else {
-            filename = "img/hero-up.png";
+            filename = "resources/img/hero-up.png";
         }
 
         try {

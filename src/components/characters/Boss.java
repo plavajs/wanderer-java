@@ -12,7 +12,7 @@ public class Boss extends GameCharacter {
 
     public Boss(int posX, int posY) {
         super(posX, posY);
-        filename = "img/boss.png";
+        filename = "resources/img/boss.png";
         try {
             image = ImageIO.read(new File(filename));
         } catch (IOException e) {
@@ -20,10 +20,10 @@ public class Boss extends GameCharacter {
         }
 
         dice = new Dice();
-        maxHealth = 5 + 4 * Arena.getArenaLevel() + dice.roll() * 3 * Arena.getArenaLevel();
+        maxHealth = 3 + 4 * Arena.getArenaLevel() + dice.roll() * 3 * Arena.getArenaLevel();
         currentHealth = maxHealth;
-        defencePoints = 2 + Arena.getArenaLevel() * 2 + dice.roll() * Arena.getArenaLevel();
-        strikePoints = 3 + Arena.getArenaLevel() * 3 + dice.roll() * Arena.getArenaLevel();
+        defencePoints = 1 + Arena.getArenaLevel() * 2 + dice.roll() * Arena.getArenaLevel();
+        strikePoints = 2 + Arena.getArenaLevel() * 3 + dice.roll() * Arena.getArenaLevel();
 
         strikeMessage = "";
     }
@@ -72,7 +72,7 @@ public class Boss extends GameCharacter {
     public Boss clone(int x, int y) {
         Boss bossClone = new Boss(x, y);
 
-        bossClone.filename = "img/boss.png";
+        bossClone.filename = "resources/img/boss.png";
         try {
             bossClone.image = ImageIO.read(new File(bossClone.filename));
         } catch (IOException e) {

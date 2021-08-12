@@ -29,7 +29,7 @@ public class BattleArena extends Arena {
     }
 
     public BattleArena(Hero hero, GameCharacter enemy, JFrame frame) {
-        linesOfTiles = loadArena("arenas/battle-arena.txt");
+        linesOfTiles = loadArena("resources/arenas/battle-arena.txt");
 
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;

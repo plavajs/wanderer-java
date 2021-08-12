@@ -59,7 +59,7 @@ public abstract class GameCharacter extends PositionedImage {
     }
 
     public void die() {
-        this.setCharIcon("img/blood.png");
+        this.setCharIcon("resources/img/blood.png");
     }
 
     public String getStrikeMessage() {

@@ -13,7 +13,7 @@ public class EnemyMob extends GameCharacter {
 
     public EnemyMob(int posX, int posY) {
         super(posX, posY);
-        filename = "img/skeleton.png";
+        filename = "resources/img/skeleton.png";
         try {
             image = ImageIO.read(new File(filename));
         } catch (IOException e) {
@@ -81,7 +81,7 @@ public class EnemyMob extends GameCharacter {
     public EnemyMob clone(int x, int y) {
         EnemyMob enemyMobClone = new EnemyMob(x, y);
 
-        enemyMobClone.filename = "img/skeleton.png";
+        enemyMobClone.filename = "resources/img/skeleton.png";
         try {
             enemyMobClone.image = ImageIO.read(new File(enemyMobClone.filename));
         } catch (IOException e) {

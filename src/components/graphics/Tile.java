@@ -13,9 +13,9 @@ public class Tile extends PositionedImage {
     public Tile(int posX, int posY, boolean passAble) {
         super(posX, posY);
         if (passAble) {
-            filename = "img/floor.png";
+            filename = "resources/img/floor.png";
         } else {
-            filename = "img/wall.png";
+            filename = "resources/img/wall.png";
         }
 
         try {

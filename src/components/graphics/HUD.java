@@ -107,7 +107,7 @@ public class HUD extends JPanel {
     }
 
     public void setKeyImage() {
-        keyImage.setIcon(new ImageIcon("img/key.png"));
+        keyImage.setIcon(new ImageIcon("resources/img/key.png"));
     }
 
     public void clearKeyImage() {

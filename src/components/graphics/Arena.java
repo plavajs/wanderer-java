@@ -69,7 +69,7 @@ public class Arena extends JComponent {
         this.gameCharacters = gameCharacters;
         this.frame = frame;
 
-        linesOfTiles = loadArena("arenas/lvl-" + arenaMaze + ".txt");
+        linesOfTiles = loadArena("resources/arenas/lvl-" + arenaMaze + ".txt");
 
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;
