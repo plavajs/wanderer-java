@@ -1,6 +1,7 @@
 package components.graphics;
 
 import components.PositionedImage;
+import components.ResourceReader;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -18,11 +19,7 @@ public class Tile extends PositionedImage {
             filename = "img/wall.png";
         }
 
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ResourceReader.readImage(filename);
         this.passAble = passAble;
     }
 

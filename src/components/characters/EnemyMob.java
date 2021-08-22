@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 
@@ -14,11 +15,7 @@ public class EnemyMob extends GameCharacter {
     public EnemyMob(int posX, int posY) {
         super(posX, posY);
         filename = "img/skeleton.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 3 * Arena.getArenaLevel() * dice.roll();
@@ -82,11 +79,7 @@ public class EnemyMob extends GameCharacter {
         EnemyMob enemyMobClone = new EnemyMob(x, y);
 
         enemyMobClone.filename = "img/skeleton.png";
-        try {
-            enemyMobClone.image = ImageIO.read(new File(enemyMobClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        enemyMobClone.image = ResourceReader.readImage(enemyMobClone.filename);
 
         enemyMobClone.maxHealth = maxHealth;
         enemyMobClone.currentHealth = currentHealth;

@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 
@@ -31,11 +32,7 @@ public class Hero extends GameCharacter {
     public Hero(int x0, int y0) {
         super(x0, y0);
         filename = "img/hero-down.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 5 + 3 * dice.roll();
@@ -73,11 +70,7 @@ public class Hero extends GameCharacter {
         Hero heroClone = new Hero(x, y);
 
         heroClone.filename = "img/hero-right.png";
-        try {
-            heroClone.image = ImageIO.read(new File(heroClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        heroClone.image = ResourceReader.readImage(heroClone.filename);
 
         heroClone.currentHealth = currentHealth;
         heroClone.maxHealth = maxHealth;
@@ -128,11 +121,7 @@ public class Hero extends GameCharacter {
             filename = "img/hero-left.png";
         }
 
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ResourceReader.readImage(filename);
     }
 
     public void changeDirectionY(int directionY) {
@@ -142,11 +131,7 @@ public class Hero extends GameCharacter {
             filename = "img/hero-up.png";
         }
 
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ResourceReader.readImage(filename);
     }
 
     public boolean validateStepX(int directionX, Arena arena) {

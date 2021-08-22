@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 
@@ -13,11 +14,8 @@ public class Boss extends GameCharacter {
     public Boss(int posX, int posY) {
         super(posX, posY);
         filename = "img/boss.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 5 + 3 * Arena.getArenaLevel() * dice.roll() + dice.roll();
@@ -73,11 +71,7 @@ public class Boss extends GameCharacter {
         Boss bossClone = new Boss(x, y);
 
         bossClone.filename = "img/boss.png";
-        try {
-            bossClone.image = ImageIO.read(new File(bossClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bossClone.image = ResourceReader.readImage(bossClone.filename);
 
         bossClone.maxHealth = maxHealth;
         bossClone.currentHealth = currentHealth;

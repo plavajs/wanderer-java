@@ -1,16 +1,22 @@
 package components.graphics;
 
+import components.ResourceReader;
 import components.characters.GameCharacter;
 import components.characters.Hero;
+import game.WandererApp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Arena extends JComponent {
     protected static final int STEP = 72;
@@ -102,16 +108,7 @@ public class Arena extends JComponent {
     }
 
     protected List<String> readFile(String file) {
-        Path filePath = Paths.get(file);
-        List<String> lines = new ArrayList<>();
-
-        try {
-            lines = Files.readAllLines(filePath);
-        } catch (IOException e) {
-            System.err.println("Can't read file " + file);
-        }
-
-        return lines;
+        return ResourceReader.readArena(file);
     }
 
     protected List<List<Tile>> loadArena(String file) {
