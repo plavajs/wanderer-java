@@ -2,6 +2,7 @@ package components.characters;
 
 import components.Dice;
 import components.PositionedImage;
+import components.ResourceReader;
 import components.graphics.Arena;
 
 import javax.imageio.ImageIO;
@@ -51,15 +52,16 @@ public abstract class GameCharacter extends PositionedImage {
     public abstract boolean isAlive();
 
     public void setCharIcon(String filename) {
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
     }
 
     public void die() {
-        this.setCharIcon("resources/img/blood.png");
+        this.setCharIcon("img/blood.png");
     }
 
     public String getStrikeMessage() {

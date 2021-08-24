@@ -29,7 +29,7 @@ public class BattleArena extends Arena {
     }
 
     public BattleArena(Hero hero, GameCharacter enemy, JFrame frame) {
-        linesOfTiles = loadArena("resources/arenas/battle-arena.txt");
+        linesOfTiles = loadArena("arenas/battle-arena.txt");
 
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;
@@ -41,8 +41,8 @@ public class BattleArena extends Arena {
         heroClone = hero.clone(2 * STEP, 2 * STEP);
         enemyClone = this.enemy.clone(4 * STEP, 2 * STEP);
         gameCharacters = new ArrayList<>();
-        gameCharacters.add(heroClone);
-        gameCharacters.add(enemyClone);
+        gameCharacters.add(this.heroClone);
+        gameCharacters.add(this.enemyClone);
 
         this.setPreferredSize(new Dimension(this.WIDTH, this.HEIGHT));
         this.frame.add(this, "North");

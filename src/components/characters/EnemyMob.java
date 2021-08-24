@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 
@@ -13,12 +14,13 @@ public class EnemyMob extends GameCharacter {
 
     public EnemyMob(int posX, int posY) {
         super(posX, posY);
-        filename = "resources/img/skeleton.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        filename = "img/skeleton.png";
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 5 * Arena.getArenaLevel() + dice.roll() * 2 * Arena.getArenaLevel();
@@ -81,12 +83,13 @@ public class EnemyMob extends GameCharacter {
     public EnemyMob clone(int x, int y) {
         EnemyMob enemyMobClone = new EnemyMob(x, y);
 
-        enemyMobClone.filename = "resources/img/skeleton.png";
-        try {
-            enemyMobClone.image = ImageIO.read(new File(enemyMobClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        enemyMobClone.filename = "img/skeleton.png";
+//        try {
+//            enemyMobClone.image = ImageIO.read(new File(enemyMobClone.filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        enemyMobClone.image = ResourceReader.readImage(enemyMobClone.filename);
 
         enemyMobClone.maxHealth = maxHealth;
         enemyMobClone.currentHealth = currentHealth;
@@ -98,7 +101,7 @@ public class EnemyMob extends GameCharacter {
     @Override
     public void strike(GameCharacter anotherChar) {
         int damage = strikePoints + dice.roll() / 2;
-        strikeMessage = "s  trikes for " + damage + " damage";
+        strikeMessage = "strikes for " + damage + " damage";
         if (damage > anotherChar.defencePoints) {
             anotherChar.getHit(damage);
         }

@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 
@@ -12,17 +13,18 @@ public class Boss extends GameCharacter {
 
     public Boss(int posX, int posY) {
         super(posX, posY);
-        filename = "resources/img/boss.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        filename = "img/boss.png";
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 3 + 4 * Arena.getArenaLevel() + dice.roll() * 3 * Arena.getArenaLevel();
         currentHealth = maxHealth;
-        defencePoints = 1 + Arena.getArenaLevel() * 2 + dice.roll() * Arena.getArenaLevel();
+        defencePoints = (int)(Arena.getArenaLevel() * 3.0 / 2 + dice.roll() * Arena.getArenaLevel());
         strikePoints = 2 + Arena.getArenaLevel() * 3 + dice.roll() * Arena.getArenaLevel();
 
         strikeMessage = "";
@@ -72,12 +74,13 @@ public class Boss extends GameCharacter {
     public Boss clone(int x, int y) {
         Boss bossClone = new Boss(x, y);
 
-        bossClone.filename = "resources/img/boss.png";
-        try {
-            bossClone.image = ImageIO.read(new File(bossClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bossClone.filename = "img/boss.png";
+//        try {
+//            bossClone.image = ImageIO.read(new File(bossClone.filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        bossClone.image = ResourceReader.readImage(bossClone.filename);
 
         bossClone.maxHealth = maxHealth;
         bossClone.currentHealth = currentHealth;

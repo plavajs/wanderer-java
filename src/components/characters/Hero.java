@@ -1,6 +1,7 @@
 package components.characters;
 
 import components.Dice;
+import components.ResourceReader;
 import components.graphics.Arena;
 import components.graphics.Tile;
 import game.Game;
@@ -31,12 +32,13 @@ public class Hero extends GameCharacter {
 
     public Hero(int x0, int y0) {
         super(x0, y0);
-        filename = "resources/img/hero-down.png";
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        filename = "img/hero-down.png";
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
 
         dice = new Dice();
         maxHealth = 8 + 3 * dice.roll();
@@ -73,17 +75,15 @@ public class Hero extends GameCharacter {
     public Hero clone(int x, int y) {
         Hero heroClone = new Hero(x, y);
 
-        heroClone.filename = "resources/img/hero-right.png";
-        try {
-            heroClone.image = ImageIO.read(new File(heroClone.filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        heroClone.filename = "img/hero-right.png";
+//        try {
+//            heroClone.image = ImageIO.read(new File(heroClone.filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        heroClone.image = ResourceReader.readImage(heroClone.        filename);
 
-        heroClone.currentHealth = currentHealth;
-        heroClone.maxHealth = maxHealth;
-        heroClone.defencePoints = defencePoints;
-        heroClone.strikePoints = strikePoints;
+        heroClone.copyStats(this);
         heroClone.heroLevel = heroLevel;
         heroClone.hasKey = hasKey;
 
@@ -136,30 +136,32 @@ public class Hero extends GameCharacter {
 
     public void changeDirectionX(int directionX) {
         if (directionX > 0) {
-            filename = "resources/img/hero-right.png";
+            filename = "img/hero-right.png";
         } else {
-            filename = "resources/img/hero-left.png";
+            filename = "img/hero-left.png";
         }
 
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
     }
 
     public void changeDirectionY(int directionY) {
         if (directionY > 0) {
-            filename = "resources/img/hero-down.png";
+            filename = "img/hero-down.png";
         } else {
-            filename = "resources/img/hero-up.png";
+            filename = "img/hero-up.png";
         }
 
-        try {
-            image = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            image = ImageIO.read(new File(filename));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        image = ResourceReader.readImage(filename);
     }
 
     public boolean validateStepX(int directionX, Arena arena) {
@@ -186,9 +188,9 @@ public class Hero extends GameCharacter {
         heroLevel++;
         maxHealth += dice.roll() / 2;
         currentHealth = maxHealth;
-        if (currentHealth > maxHealth) {
-            currentHealth = maxHealth;
-        }
+//        if (currentHealth > maxHealth) {
+//            currentHealth = maxHealth;
+//        }
         defencePoints += dice.roll() / 4;
         strikePoints += dice.roll() / 4;
     }

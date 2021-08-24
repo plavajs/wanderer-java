@@ -1,5 +1,6 @@
 package components.graphics;
 
+import components.ResourceReader;
 import components.characters.GameCharacter;
 import components.characters.Hero;
 
@@ -69,7 +70,7 @@ public class Arena extends JComponent {
         this.gameCharacters = gameCharacters;
         this.frame = frame;
 
-        linesOfTiles = loadArena("resources/arenas/lvl-" + arenaMaze + ".txt");
+        linesOfTiles = loadArena("arenas/lvl-" + arenaMaze + ".txt");
 
         WIDTH = linesOfTiles.get(0).size() * STEP;
         HEIGHT = linesOfTiles.size() * STEP;
@@ -102,16 +103,17 @@ public class Arena extends JComponent {
     }
 
     protected List<String> readFile(String file) {
-        Path filePath = Paths.get(file);
-        List<String> lines = new ArrayList<>();
-
-        try {
-            lines = Files.readAllLines(filePath);
-        } catch (IOException e) {
-            System.err.println("Can't read file " + file);
-        }
-
-        return lines;
+//        Path filePath = Paths.get(file);
+//        List<String> lines = new ArrayList<>();
+//
+//        try {
+//            lines = Files.readAllLines(filePath);
+//        } catch (IOException e) {
+//            System.err.println("Can't read file " + file);
+//        }
+//
+//        return lines;
+        return ResourceReader.readArena(file);
     }
 
     protected List<List<Tile>> loadArena(String file) {
